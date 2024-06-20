@@ -17,7 +17,7 @@ public class ConsumerService {
     @Value("${spring.activemq.queue}")
     String queue;
 
-    @JmsListener(destination = "myQueue", containerFactory = "myFactory")
+    @JmsListener(destination = "myQueue")
     @SendTo("myQueue2")
     public String receiveAndForwardMessageFromQueue(final Message jsonMessage) throws JMSException {
         String messageData = null;

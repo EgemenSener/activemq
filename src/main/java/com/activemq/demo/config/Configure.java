@@ -45,6 +45,7 @@ public class Configure {
         connectionFactory.setBrokerURL(BROKER_URL);
         connectionFactory.setPassword(BROKER_USERNAME);
         connectionFactory.setUserName(BROKER_PASSWORD);
+        connectionFactory.getPrefetchPolicy().setQueuePrefetch(1); // Prefetch size
         return connectionFactory;
     }
 
@@ -80,15 +81,6 @@ public class Configure {
         UserDetails application = User.builder().username("sa").password("{noop}" + "as").roles("APPLICATION").build();
 
         return new InMemoryUserDetailsManager(application);
-    }
-
-    @Bean
-    public JmsListenerContainerFactory<?> myFactory(ActiveMQConnectionFactory connectionFactory) {
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setConcurrency("2-4"); // Concurrency ayarları
-        factory.setPubSubDomain(false); // Queue kullanımı için
-        return factory;
     }
 
     @Bean
