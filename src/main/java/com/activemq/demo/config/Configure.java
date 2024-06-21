@@ -8,14 +8,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
-import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
-import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 import org.springframework.jms.support.destination.DynamicDestinationResolver;
-import org.apache.activemq.jms.pool.PooledConnectionFactory;
 
 import jakarta.jms.Destination;
 import jakarta.jms.JMSException;
@@ -75,24 +72,6 @@ public class Configure {
         template.setDestinationResolver(destinationResolver());
         template.setDeliveryPersistent(true);
         return template;
-    }
-
-    @Bean
-    public PooledConnectionFactory pooledConnectionFactory() {
-        PooledConnectionFactory pool = new PooledConnectionFactory();
-        pool.setConnectionFactory(connectionFactory());
-        pool.setMaxConnections(10); // Havuzdaki maksimum bağlantı sayısı
-        pool.setMaximumActiveSessionPerConnection(8); // Bağlantı başına maksimum oturum sayısı
-        return pool;
-    }
-
-    @Bean
-    public JmsListenerContainerFactory<?> jmsListenerContainerFactory() {
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        factory.setConnectionFactory(pooledConnectionFactory());
-        factory.setSessionAcknowledgeMode(Session.AUTO_ACKNOWLEDGE);
-        factory.setConcurrency("2-8");
-        return factory;
     }
 
     @Bean
