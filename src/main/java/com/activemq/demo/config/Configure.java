@@ -15,6 +15,7 @@ import org.springframework.jms.support.converter.MappingJackson2MessageConverter
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 import org.springframework.jms.support.destination.DynamicDestinationResolver;
+import org.apache.activemq.jms.pool.PooledConnectionFactory;
 
 import jakarta.jms.Destination;
 import jakarta.jms.JMSException;
@@ -77,6 +78,24 @@ public class Configure {
     }
 
     @Bean
+    public PooledConnectionFactory pooledConnectionFactory() {
+        PooledConnectionFactory pool = new PooledConnectionFactory();
+        pool.setConnectionFactory(connectionFactory());
+        pool.setMaxConnections(10); // Havuzdaki maksimum bağlantı sayısı
+        pool.setMaximumActiveSessionPerConnection(8); // Bağlantı başına maksimum oturum sayısı
+        return pool;
+    }
+
+    @Bean
+    public JmsListenerContainerFactory<?> jmsListenerContainerFactory() {
+        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+        factory.setConnectionFactory(pooledConnectionFactory());
+        factory.setSessionAcknowledgeMode(Session.AUTO_ACKNOWLEDGE);
+        factory.setConcurrency("2-8");
+        return factory;
+    }
+
+    @Bean
     public InMemoryUserDetailsManager userDetailsManager() {
         UserDetails application = User.builder().username("sa").password("{noop}" + "as").roles("APPLICATION").build();
 
@@ -85,7 +104,6 @@ public class Configure {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .anyRequest().authenticated()
@@ -103,13 +121,11 @@ public class Configure {
             public Destination resolveDestinationName(Session session, String destinationName, boolean pubSubDomain) throws JMSException {
                 if(destinationName.endsWith("Topic")) {
                     pubSubDomain = true;
-                }
-                else {
+                } else {
                     pubSubDomain = false;
                 }
-                return super.resolveDestinationName(session,destinationName,pubSubDomain);
+                return super.resolveDestinationName(session, destinationName, pubSubDomain);
             }
         };
     }
-
 }
