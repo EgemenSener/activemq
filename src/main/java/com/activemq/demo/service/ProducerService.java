@@ -26,7 +26,7 @@ public class ProducerService {
         this.jmsTemplate = jmsTemplate;
     }
 
-    public void sendToQueue() throws JsonProcessingException {
+    public void sendToQueue() {
         for (int i = 0; i < 200; i++) {
             try {
                 Employee employee = new Employee("Micheal", "Jackson", 10000L, new Date(), 24 + i);
@@ -43,7 +43,7 @@ public class ProducerService {
         }
     }
 
-    public void sendToTopic() throws JsonProcessingException {
+    public void sendToTopic() {
         try {
             Department department = new Department(1,"HR",100);
             String jsonObj = new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(department);
