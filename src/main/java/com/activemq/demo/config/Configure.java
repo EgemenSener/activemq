@@ -17,6 +17,7 @@ import org.springframework.jms.support.destination.DynamicDestinationResolver;
 import jakarta.jms.Destination;
 import jakarta.jms.JMSException;
 import jakarta.jms.Session;
+import org.springframework.lang.NonNull;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -97,12 +98,8 @@ public class Configure {
     DynamicDestinationResolver destinationResolver() {
         return new DynamicDestinationResolver() {
             @Override
-            public Destination resolveDestinationName(Session session, String destinationName, boolean pubSubDomain) throws JMSException {
-                if(destinationName.endsWith("Topic")) {
-                    pubSubDomain = true;
-                } else {
-                    pubSubDomain = false;
-                }
+            public @NonNull Destination resolveDestinationName(Session session, @NonNull String destinationName, boolean pubSubDomain) throws JMSException {
+                pubSubDomain = destinationName.endsWith("Topic");
                 return super.resolveDestinationName(session, destinationName, pubSubDomain);
             }
         };
