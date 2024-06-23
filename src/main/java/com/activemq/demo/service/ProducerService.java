@@ -2,7 +2,6 @@ package com.activemq.demo.service;
 
 import com.activemq.demo.entity.Department;
 import com.activemq.demo.entity.Employee;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.jms.TextMessage;
 import org.springframework.beans.factory.annotation.Autowired;

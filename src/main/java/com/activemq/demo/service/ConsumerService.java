@@ -22,8 +22,7 @@ public class ConsumerService {
     public String receiveAndForwardMessageFromQueue(final Message jsonMessage) throws JMSException {
         String messageData = null;
         System.out.println("Received message " + jsonMessage);
-        if (jsonMessage instanceof TextMessage) {
-            TextMessage textMessage = (TextMessage) jsonMessage;
+        if (jsonMessage instanceof TextMessage textMessage) {
             messageData = textMessage.getText();
             System.out.println("messageData:" + messageData);
             try {
@@ -41,8 +40,7 @@ public class ConsumerService {
     public String receiveAndForwardMessageFromTopic(final Message jsonMessage) throws JMSException, JsonProcessingException {
         String messageData = null;
         System.out.println("Received message " + jsonMessage);
-        if(jsonMessage instanceof TextMessage) {
-            TextMessage textMessage = (TextMessage)jsonMessage;
+        if(jsonMessage instanceof TextMessage textMessage) {
             messageData = textMessage.getText();
             System.out.println("messageData:"+messageData);
         }
@@ -54,8 +52,7 @@ public class ConsumerService {
     public void receiveMessageFromTopic(final Message jsonMessage) throws JMSException {
         String messageData = null;
         System.out.println("Received message in 2nd topic " + jsonMessage);
-        if(jsonMessage instanceof TextMessage) {
-            TextMessage textMessage = (TextMessage)jsonMessage;
+        if(jsonMessage instanceof TextMessage textMessage) {
             messageData = textMessage.getText();
             System.out.println("messageData in 2nd listener:"+messageData);
         }

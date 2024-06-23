@@ -18,12 +18,12 @@ public class QueueRestController {
     }
 
     @PostMapping("/sendToQueue")
-    public void sendToQueue() throws JsonProcessingException {
+    public void sendToQueue() {
         producerService.sendToQueue();
     }
 
     @PostMapping("/sendToTopic")
-    public void sendToTopic() throws JsonProcessingException {
+    public void sendToTopic() {
         producerService.sendToTopic();
     }
 }
