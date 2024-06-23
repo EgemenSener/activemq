@@ -1,6 +1,5 @@
 package com.activemq.demo.controller;
 
-import com.activemq.demo.service.ConsumerService;
 import com.activemq.demo.service.ProducerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;

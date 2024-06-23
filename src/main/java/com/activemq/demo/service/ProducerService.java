@@ -4,15 +4,15 @@ import com.activemq.demo.entity.Department;
 import com.activemq.demo.entity.Employee;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.jms.TextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import jakarta.jms.TextMessage;
 import java.util.Date;
 
-@Component
+@Service
 public class ProducerService {
 
     @Value("${spring.activemq.topic}")
@@ -20,9 +20,11 @@ public class ProducerService {
 
     @Value("${spring.activemq.queue}")
     String queue;
-
+    private final JmsTemplate jmsTemplate;
     @Autowired
-    JmsTemplate jmsTemplate;
+    public ProducerService(JmsTemplate jmsTemplate) {
+        this.jmsTemplate = jmsTemplate;
+    }
 
     public void sendToQueue() throws JsonProcessingException {
         for (int i = 0; i < 200; i++) {
